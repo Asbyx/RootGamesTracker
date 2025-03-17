@@ -2,13 +2,13 @@
 
 A web application for tracking and analyzing games of Root, built with Cloudflare.  
 
-You can see an example [here](https://asbyx.github.io/ggrootgames).
+You can see an example [here](https://asbyx.github.io/RootGamesTracker).
 
 ## 🚀 Deploy Your Own Copy
 
 Want to deploy your own Root Games Tracker? Just click the button below:
 
-[![Deploy to Cloudflare](https://img.shields.io/badge/Deploy%20to-Cloudflare-orange?style=for-the-badge&logo=cloudflare)](https://github.com/Asbyx/ggrootgames/fork)
+[![Deploy to Cloudflare](https://img.shields.io/badge/Deploy%20to-Cloudflare-orange?style=for-the-badge&logo=cloudflare)](https://github.com/Asbyx/RootGamesTracker/fork)
 
 ### One-Click Deployment Instructions
 
@@ -26,7 +26,7 @@ That's it! No coding knowledge required. Your Root Games Tracker is now deployed
 
 If you like my work, [consider offering me a coffee](https://buymeacoffee.com/asbyx) !  
 
-If you see a bug, or would like to see some features added: you can [declare an issue](https://github.com/Asbyx/ggrootgames/issues) ! Or even [make a pull request](https://github.com/Asbyx/ggrootgames/pulls) if you would like to contribute directly ! 
+If you see a bug, or would like to see some features added: you can [declare an issue](https://github.com/Asbyx/RootGamesTracker/issues) ! Or even [make a pull request](https://github.com/Asbyx/RootGamesTracker/pulls) if you would like to contribute directly ! 
 
 
 ## Features
@@ -42,7 +42,7 @@ If you prefer to deploy manually, follow these steps:
 
 1. **Prerequisites**
    - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up) (free tier is sufficient)
-   - Download and extract the [latest release](https://github.com/Asbyx/ggrootgames/releases/latest)
+   - Download and extract the [latest release](https://github.com/Asbyx/RootGamesTracker/releases/latest)
    - Install [Node.js](https://nodejs.org/) (v16 or later)
 
 2. **Setup and Deploy**
