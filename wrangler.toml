@@ -1,0 +1,17 @@
+name = "rootgames"
+compatibility_date = "2025-03-12"
+
+main = "backend/index.js"
+
+# Configure static assets
+[assets]
+directory = "./frontend"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+# Configure D1 database
+[[d1_databases]]
+binding = "DB"
+database_name = "rootgames"
+database_id = "REPLACE_WITH_YOUR_DATABASE_ID"
+migrations_dir = "db"

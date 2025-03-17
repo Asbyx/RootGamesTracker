@@ -1,0 +1,69 @@
+name: Setup Deployment Tokens
+
+on:
+  workflow_dispatch:
+    inputs:
+      cf_email:
+        description: 'Your Cloudflare email'
+        required: true
+      cf_global_api_key:
+        description: 'Your Cloudflare Global API Key'
+        required: true
+        
+jobs:
+  setup-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Install dependencies
+        run: npm install -g cloudflare-cli
+        
+      - name: Get Account ID
+        id: get-account-id
+        env:
+          CF_EMAIL: ${{ github.event.inputs.cf_email }}
+          CF_KEY: ${{ github.event.inputs.cf_global_api_key }}
+        run: |
+          ACCOUNT_ID=$(cloudflare-cli accounts list --format json | jq -r '.[0].id')
+          echo "account_id=$ACCOUNT_ID" >> $GITHUB_OUTPUT
+          
+      - name: Create API Token
+        id: create-token
+        env:
+          CF_EMAIL: ${{ github.event.inputs.cf_email }}
+          CF_KEY: ${{ github.event.inputs.cf_global_api_key }}
+          ACCOUNT_ID: ${{ steps.get-account-id.outputs.account_id }}
+        run: |
+          TOKEN=$(cloudflare-cli tokens create \
+            --name "Root Games Tracker Deploy" \
+            --permission "account:d1:edit" \
+            --permission "workers:edit" \
+            --permission "account:workers_subdomain:read" \
+            --resource "com.cloudflare.api.account.$ACCOUNT_ID" \
+            --format json | jq -r '.result.value')
+          
+          echo "Tokens created successfully!"
+          echo "Please add these secrets to your GitHub repository:"
+          echo "CF_API_TOKEN: $TOKEN"
+          echo "CF_ACCOUNT_ID: $ACCOUNT_ID"
+          echo "CF_WORKERS_SUBDOMAIN: workers.dev"
+          
+      - name: Instructions
+        run: |
+          echo "============================================"
+          echo "SETUP INSTRUCTIONS:"
+          echo "============================================"
+          echo "1. Go to your GitHub repository settings"
+          echo "2. Click on 'Secrets and variables' -> 'Actions'"
+          echo "3. Add these repository secrets:"
+          echo "   - CF_API_TOKEN"
+          echo "   - CF_ACCOUNT_ID"
+          echo "   - CF_WORKERS_SUBDOMAIN (set to 'workers.dev')"
+          echo "4. Return to the Actions tab and run the 'Deploy to Cloudflare' workflow" 

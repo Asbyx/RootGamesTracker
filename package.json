@@ -1,0 +1,21 @@
+{
+  "name": "ggrootgames",
+  "version": "1.0.0",
+  "description": "Grand Groupe Root Games Tracker",
+  "main": "backend/index.js",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "dev:remote": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create ggrootgames",
+    "db:execute": "wrangler d1 execute ggrootgames --local --file=./db/schema.sql",
+    "db:execute:prod": "wrangler d1 execute $(node -e \"console.log(require('./wrangler.toml').d1_databases[0].database_name)\") --file=./db/schema.sql --remote",
+    "package": "node scripts/package.js",
+    "deploy:url": "node scripts/create-deploy-url.js",
+    "deploy:all": "npm run deploy && npm run db:execute:prod && npm run deploy:url"
+  },
+  "dependencies": {
+    "toml": "^3.0.0",
+    "wrangler": "^3.32.0"
+  }
+} 
