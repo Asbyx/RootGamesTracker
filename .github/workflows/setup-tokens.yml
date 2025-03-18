@@ -20,50 +20,32 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
           
-      - name: Install dependencies
-        run: npm install -g cloudflare-cli
-        
-      - name: Get Account ID
-        id: get-account-id
-        env:
-          CF_EMAIL: ${{ github.event.inputs.cf_email }}
-          CF_KEY: ${{ github.event.inputs.cf_global_api_key }}
+      - name: Install Cloudflare API Tools
         run: |
-          ACCOUNT_ID=$(cloudflare-cli accounts list --format json | jq -r '.[0].id')
-          echo "account_id=$ACCOUNT_ID" >> $GITHUB_OUTPUT
+          npm install -g cloudflare
           
-      - name: Create API Token
-        id: create-token
-        env:
-          CF_EMAIL: ${{ github.event.inputs.cf_email }}
-          CF_KEY: ${{ github.event.inputs.cf_global_api_key }}
-          ACCOUNT_ID: ${{ steps.get-account-id.outputs.account_id }}
-        run: |
-          TOKEN=$(cloudflare-cli tokens create \
-            --name "Root Games Tracker Deploy" \
-            --permission "account:d1:edit" \
-            --permission "workers:edit" \
-            --permission "account:workers_subdomain:read" \
-            --resource "com.cloudflare.api.account.$ACCOUNT_ID" \
-            --format json | jq -r '.result.value')
-          
-          echo "Tokens created successfully!"
-          echo "Please add these secrets to your GitHub repository:"
-          echo "CF_API_TOKEN: $TOKEN"
-          echo "CF_ACCOUNT_ID: $ACCOUNT_ID"
-          echo "CF_WORKERS_SUBDOMAIN: workers.dev"
-          
-      - name: Instructions
+      - name: Generate Instructions
         run: |
           echo "============================================"
           echo "SETUP INSTRUCTIONS:"
           echo "============================================"
-          echo "1. Go to your GitHub repository settings"
-          echo "2. Click on 'Secrets and variables' -> 'Actions'"
-          echo "3. Add these repository secrets:"
-          echo "   - CF_API_TOKEN"
-          echo "   - CF_ACCOUNT_ID"
-          echo "   - CF_WORKERS_SUBDOMAIN (set to 'workers.dev')"
-          echo "4. Return to the Actions tab and run the 'Deploy to Cloudflare' workflow" 
+          echo "1. Log in to your Cloudflare dashboard at https://dash.cloudflare.com/"
+          echo "2. Go to 'My Profile' > 'API Tokens'"
+          echo "3. Create a new token with the following permissions:"
+          echo "   - Account > Workers Scripts > Edit"
+          echo "   - Account > Workers Routes > Edit"
+          echo "   - Account > D1 > Edit"
+          echo "   - Account > Account Settings > Read"
+          echo ""
+          echo "4. Get your Cloudflare Account ID:"
+          echo "   - Go to Workers & Pages in your Cloudflare dashboard"
+          echo "   - Your Account ID is in the URL: https://dash.cloudflare.com/<ACCOUNT_ID>/workers"
+          echo ""
+          echo "5. Add the following secrets to your GitHub repository (Settings > Secrets and variables > Actions):"
+          echo "   - CF_API_TOKEN: Your new API token"
+          echo "   - CF_ACCOUNT_ID: Your Cloudflare Account ID"
+          echo "   - CF_WORKERS_SUBDOMAIN: workers.dev"
+          echo ""
+          echo "6. Return to the Actions tab and run the 'Deploy to Cloudflare' workflow" 

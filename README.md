@@ -14,13 +14,13 @@ Want to deploy your own Root Games Tracker? Just click the button below:
 
 1. Click the **Deploy to Cloudflare** button above to fork this repository
 2. Go to the **Actions** tab in your forked repository
-3. Run the **Setup Deployment Tokens** workflow:
-   - Enter your Cloudflare email
-   - Enter your Cloudflare Global API Key (find it in your [Cloudflare Profile](https://dash.cloudflare.com/profile/api-tokens))
-4. Add the secrets to your repository as instructed by the workflow
-5. Run the **Deploy to Cloudflare** workflow
+3. Run the **Setup Deployment Tokens** workflow and follow the instructions:
+   - You'll need to create a Cloudflare API Token with appropriate permissions
+   - You'll need your Cloudflare Account ID
+   - Add these as secrets to your GitHub repository
+4. Run the **Deploy to Cloudflare** workflow
    - Enter a name for your project (e.g., "rootgames")
-6. Once completed, you can access your site at the URL shown in the workflow output!
+5. Once completed, you can access your site at the URL shown in the workflow output!
 
 That's it! No coding knowledge required. Your Root Games Tracker is now deployed with its own database.
 
@@ -43,18 +43,19 @@ If you prefer to deploy manually, follow these steps:
 1. **Prerequisites**
    - Create a [Cloudflare account](https://dash.cloudflare.com/sign-up) (free tier is sufficient)
    - Download and extract the [latest release](https://github.com/Asbyx/ggrootgames/releases/latest)
-   - Install [Node.js](https://nodejs.org/) (v16 or later)
+   - Install [Node.js](https://nodejs.org/) (v18 or later)
 
 2. **Setup and Deploy**
    - Open a command prompt in the project folder
    - Run `npm install`
+   - Install Wrangler v4: `npm install -g wrangler@4`
    - Log in to Cloudflare: `npx wrangler login`
    - Create a D1 database: `npx wrangler d1 create rootgames`
    - In `wrangler.toml`, update:
      - `database_id` with your new database ID
      - `name` and `database_name` with your chosen project name
-   - Deploy: `npm run deploy`
-   - Initialize database: `npm run db:execute:prod`
+   - Deploy: `npx wrangler deploy`
+   - Initialize database: `npx wrangler d1 execute rootgames --file=./db/schema.sql`
 
 3. **Access Your Site**
    - Go to the Cloudflare dashboard → Workers & Pages
